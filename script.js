@@ -102,7 +102,7 @@ function initForms() {
     const original = submitButton?.textContent || 'Send brief';
 
     if (submitButton) submitButton.textContent = 'Brief sent';
-    if (formNote) formNote.textContent = 'Got it. We will turn this into a practical first-build conversation.';
+    if (formNote) formNote.textContent = 'Got it. AXIOM will turn this into a practical automation plan.';
 
     window.setTimeout(() => {
       contactForm.reset();
@@ -149,10 +149,16 @@ function initFeatureSystem() {
 
 function initPricingEngine() {
   const pricingMatrix = {
+    baseCurrency: 'INR',
+    baseMonthlyRates: {
+      starter: 6900,
+      pro: 18900,
+      enterprise: 49900
+    },
     currencies: {
-      INR: { symbol: '₹', locale: 'en-IN', tariff: 1, starter: 6900, pro: 18900, enterprise: 49900 },
-      USD: { symbol: '$', locale: 'en-US', tariff: 1.08, starter: 89, pro: 239, enterprise: 629 },
-      EUR: { symbol: '€', locale: 'de-DE', tariff: 1.03, starter: 82, pro: 219, enterprise: 579 }
+      INR: { locale: 'en-IN', code: 'INR', conversionRate: 1 },
+      USD: { locale: 'en-US', code: 'USD', conversionRate: 0.012 },
+      EUR: { locale: 'de-DE', code: 'EUR', conversionRate: 0.011 }
     },
     billing: {
       monthly: { multiplier: 1, period: '/mo', note: 'Billed monthly' },
@@ -176,13 +182,12 @@ function initPricingEngine() {
     };
   });
 
-  const formatPrice = (amount, currencyConfig, currencyCode) => {
-    const adjusted = Math.round(amount * currencyConfig.tariff);
+  const formatPrice = (amount, currencyConfig) => {
     return new Intl.NumberFormat(currencyConfig.locale, {
       style: 'currency',
-      currency: currencyCode,
+      currency: currencyConfig.code,
       maximumFractionDigits: 0
-    }).format(adjusted);
+    }).format(Math.round(amount));
   };
 
   const updatePricingTextNodes = () => {
@@ -190,9 +195,9 @@ function initPricingEngine() {
     const billingConfig = pricingMatrix.billing[state.billing];
 
     planNodes.forEach(({ plan, price, period, note }) => {
-      const baseRate = currencyConfig[plan];
-      const computedPrice = baseRate * billingConfig.multiplier;
-      if (price) price.textContent = formatPrice(computedPrice, currencyConfig, state.currency);
+      const baseRate = pricingMatrix.baseMonthlyRates[plan];
+      const computedPrice = baseRate * currencyConfig.conversionRate * billingConfig.multiplier;
+      if (price) price.textContent = formatPrice(computedPrice, currencyConfig);
       if (period) period.textContent = billingConfig.period;
       if (note) note.textContent = billingConfig.note;
     });
@@ -225,3 +230,5 @@ function debounce(callback, wait) {
     timeoutId = window.setTimeout(() => callback(...args), wait);
   };
 }
+
+
