@@ -183,6 +183,7 @@ summary::-webkit-details-marker { display: none; }
 details p { padding: 0 22px 20px; margin: 0; }
 
 .contact { background: linear-gradient(135deg, var(--teal) 0%, var(--ink) 70%); }
+.contact h2 { max-width: 620px; line-height: 1.05; text-wrap: balance; }
 .contact-form { border: 1px solid var(--line); border-radius: 8px; background: rgba(16,30,38,0.52); padding: 24px; box-shadow: var(--shadow); }
 .contact-form label { display: grid; gap: 8px; margin-bottom: 14px; }
 .contact-form label span, .footer-newsletter label span { color: var(--mint); font-size: 0.82rem; font-weight: 800; }
@@ -221,6 +222,7 @@ details p { padding: 0 22px 20px; margin: 0; }
 }
 
 @media (max-width: 760px) {
+  .contact h2 { max-width: 100%; font-size: clamp(2.2rem, 12vw, 3.6rem); line-height: 1.08; }
   .container { width: min(100% - 28px, 1180px); }
   .header-inner { height: 68px; gap: 12px; }
   .brand-subtitle { max-width: 112px; }
@@ -249,6 +251,7 @@ details p { padding: 0 22px 20px; margin: 0; }
 }
 
 @media (max-width: 460px) {
+  .contact h2 { font-size: 2.45rem; }
   h1 { font-size: 2.58rem; }
   .brand { font-size: 1.05rem; }
   .brand-mark { width: 30px; height: 30px; }
@@ -263,5 +266,6 @@ details p { padding: 0 22px 20px; margin: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
 
 
